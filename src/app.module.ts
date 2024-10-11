@@ -11,7 +11,7 @@ import { DEFAULT_MONGO, DEFAULT_LOGGER_FACTORY } from './app.constants';
   providers: [
     {
       provide: DEFAULT_MONGO,
-      useFactory: async (): Promise<void> => {
+      useFactory: async (): Promise<CustomMongoClient> => {
         const opt: CustomDefinition.IMongoOptions = {
           user: appConf.defaultMongo.user,
           pass: appConf.defaultMongo.password,
@@ -20,8 +20,7 @@ import { DEFAULT_MONGO, DEFAULT_LOGGER_FACTORY } from './app.constants';
           maxPoolSize: appConf.defaultMongo.maxPoolSize,
           db: appConf.defaultMongo.dbName,
         };
-        const client = new CustomMongoClient(appConf.defaultMongo.uri, opt);
-        await client.tryConnect();
+        return new CustomMongoClient(appConf.defaultMongo.uri, opt);
       },
     },
     {
