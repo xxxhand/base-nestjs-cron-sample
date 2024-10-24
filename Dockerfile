@@ -26,6 +26,12 @@ RUN yarn build
 ## ----------------------------Copy necessary only
 
 FROM node:iron-slim
+
+# Install logrotate
+RUN apt-get update && apt-get -y install logrotate
+RUN mkdir /var/log/base-nestjs-cron-sample
+COPY logrotate.conf /etc/logrotate.d/base-nestjs-cron-sample
+
 ENV NODE_ENV production
 # USER node
 WORKDIR /home/app

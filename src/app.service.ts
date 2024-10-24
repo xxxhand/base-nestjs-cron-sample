@@ -26,8 +26,13 @@ export class AppService {
     this._isRunning = true;
     await this.db.tryConnect();
     this._Logger.log('Impletement logic here....');
+    
+    await this._terminate();
+
+  }
+
+  private async _terminate(): Promise<void> {
     await this.db.close();
     this._isRunning = false;
-
   }
 }
