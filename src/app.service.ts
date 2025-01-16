@@ -19,16 +19,22 @@ export class AppService {
 
   @Cron(appConf.executeExpression)
   async execute(): Promise<void> {
-    if (this._isRunning) {
-      this._Logger.log('Last task is not completed yet...');
-      return;
-    }
-    this._isRunning = true;
-    await this.db.tryConnect();
-    this._Logger.log('Impletement logic here....');
-    
-    await this._terminate();
+    // Must have try catch block to handle error
+    try {
+      if (this._isRunning) {
+        this._Logger.log('Last task is not completed yet...');
+        return;
+      }
+      this._isRunning = true;
+      await this.db.tryConnect();
+      this._Logger.log('Impletement logic here....');
 
+    } catch (error) {
+      this._Logger.error(error.message);
+      this._Logger.error(error.stack);
+    } finally {
+      await this._terminate();
+    }
   }
 
   private async _terminate(): Promise<void> {
